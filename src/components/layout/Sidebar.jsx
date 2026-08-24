@@ -21,10 +21,10 @@ const Sidebar = ({ open, onClose }) => {
   };
 
   const sidebarContent = (
-    <aside style={{
+    <aside className="sidebar" style={{
       width: 240,
       height: "100vh",
-      background: "rgba(10,10,18,0.98)",
+      // background: "rgba(10,10,18,0.98)",
       borderRight: "1px solid var(--border-subtle)",
       display: "flex",
       flexDirection: "column",
@@ -55,9 +55,10 @@ const Sidebar = ({ open, onClose }) => {
       <nav style={{ flex: 1, padding: "0 0.75rem" }}>
         <p className="section-label" style={{ padding: "0 0.75rem", marginBottom: 8 }}>Menu</p>
         {navItems.map(({ to, icon, label }) => (
-          <NavLink
+          <NavLink className="nav-item"
             key={to}
             to={to}
+            end={to === "/skills"}
             onClick={onClose}
             style={({ isActive }) => ({
               display: "flex",
@@ -69,7 +70,7 @@ const Sidebar = ({ open, onClose }) => {
               marginBottom: 2,
               fontSize: "0.875rem",
               fontWeight: isActive ? 600 : 400,
-              color: isActive ? "white" : "var(--text-muted)",
+             color: isActive ? "#0d6e8e" : "var(--text)",
               background: isActive ? "linear-gradient(135deg, rgba(108,71,255,0.3), rgba(108,71,255,0.1))" : "transparent",
               border: isActive ? "1px solid rgba(108,71,255,0.3)" : "1px solid transparent",
               transition: "all 0.2s",
@@ -93,7 +94,7 @@ const Sidebar = ({ open, onClose }) => {
             {(user?.name || "U").slice(0, 1).toUpperCase()}
           </div>
           <div>
-            <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 600, color: "var(--text)" }}>{user?.name}</p>
+            <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 600, color: "black" }}>{user?.name}</p>
             <p style={{ margin: 0, fontSize: "0.7rem", color: "var(--text-dim)" }}>{user?.role}</p>
           </div>
         </div>

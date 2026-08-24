@@ -15,36 +15,80 @@ const Requests = () => {
 
   const load = async () => {
     setLoading(true);
-    const data = await exchangeService.getMy().catch(() => []);
-    setRequests(Array.isArray(data) ? data : data.requests || []);
-    setLoading(false);
+
+    try {
+      const data = await exchangeService.getMy();
+      setRequests(data.request || []);
+    } catch (error) {
+      console.error("Failed to fetch requests:", error);
+      setRequests([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
-  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 3000); };
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 3000);
+  };
 
   const accept = async (id) => {
-    await exchangeService.accept(id).catch(e => showToast("Error: " + e.message));
-    showToast("Request accepted! 🎉"); load();
+    try {
+      await exchangeService.accept(id);
+      showToast("Request accepted! 🎉");
+      await load();
+    } catch (error) {
+      console.error("Failed to accept request:", error);
+      showToast("Error: " + error.message);
+    }
   };
 
   const decline = async (id) => {
-    await exchangeService.decline(id).catch(e => showToast("Error: " + e.message));
-    showToast("Request declined."); load();
+    try {
+      await exchangeService.decline(id);
+      showToast("Request declined.");
+      await load();
+    } catch (error) {
+      console.error("Failed to decline request:", error);
+      showToast("Error: " + error.message);
+    }
   };
 
   const complete = async (id) => {
-    await exchangeService.complete(id).catch(e => showToast("Error: " + e.message));
-    showToast("Marked as completed ✓"); load();
+    try {
+      await exchangeService.complete(id);
+      showToast("Marked as completed ✓");
+      await load();
+    } catch (error) {
+      console.error("Failed to complete request:", error);
+      showToast("Error: " + error.message);
+    }
   };
 
-  const filtered = tab === "all" ? requests : requests.filter(r => r.status === tab);
+  const filtered = tab === "all" ? requests : requests.filter((r) => r.status === tab);
 
   return (
     <div className="content-area">
       {toast && (
-        <div style={{ position: "fixed", top: 80, right: 20, zIndex: 2000, background: "var(--bg-card2)", border: "1px solid var(--border)", borderRadius: 10, padding: "0.75rem 1rem", color: "var(--text)", fontSize: "0.875rem", boxShadow: "var(--shadow)" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 80,
+            right: 20,
+            zIndex: 2000,
+            background: "var(--bg-card2)",
+            border: "1px solid var(--border)",
+            borderRadius: 10,
+            padding: "0.75rem 1rem",
+            color: "var(--text)",
+            fontSize: "0.875rem",
+            boxShadow: "var(--shadow)",
+          }}
+        >
           {toast}
         </div>
       )}
@@ -56,11 +100,18 @@ const Requests = () => {
 
       {/* Tabs */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: "1.5rem" }}>
-        {TABS.map(t => (
-          <button key={t} onClick={() => setTab(t)}
+        {TABS.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
             style={{
-              padding: "0.4rem 0.9rem", borderRadius: 100, cursor: "pointer", fontSize: "0.8rem",
-              fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: "capitalize",
+              padding: "0.4rem 0.9rem",
+              borderRadius: 100,
+              cursor: "pointer",
+              fontSize: "0.8rem",
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 600,
+              textTransform: "capitalize",
               border: tab === t ? "1px solid var(--primary)" : "1px solid var(--border-subtle)",
               background: tab === t ? "rgba(108,71,255,0.2)" : "transparent",
               color: tab === t ? "var(--primary-light)" : "var(--text-muted)",
@@ -70,29 +121,25 @@ const Requests = () => {
             {t}
             {t !== "all" && (
               <span style={{ marginLeft: 5, background: "rgba(255,255,255,0.1)", borderRadius: 100, padding: "0 5px", fontSize: "0.7rem" }}>
-                {requests.filter(r => r.status === t).length}
+                {requests.filter((r) => r.status === t).length}
               </span>
             )}
           </button>
         ))}
       </div>
 
-      {loading ? <Loader /> : filtered.length === 0 ? (
+      {loading ? (
+        <Loader />
+      ) : filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "4rem 2rem", color: "var(--text-muted)" }}>
           <p style={{ fontSize: "2rem" }}>⇄</p>
           <p>No {tab === "all" ? "" : tab} requests yet</p>
         </div>
       ) : (
         <div className="row g-3 animate-fade-up">
-          {filtered.map(req => (
+          {filtered.map((req) => (
             <div key={req._id} className="col-md-6 col-xl-4">
-              <RequestCard
-                request={req}
-                currentUserId={user?._id}
-                onAccept={accept}
-                onDecline={decline}
-                onComplete={complete}
-              />
+              <RequestCard request={req} currentUserId={user?._id} onAccept={accept} onDecline={decline} onComplete={complete} />
             </div>
           ))}
         </div>
