@@ -259,11 +259,11 @@ const Landing = () => {
         }} />
 
         {/* Floating pills */}
-        <FloatingPill className="floating-pill" label="Guitar Lessons" icon="🎸" style={{ top: "22%", left: "4%", animationDelay: "0s" }} />
+        {/* <FloatingPill className="floating-pill" label="Guitar Lessons" icon="🎸" style={{ top: "22%", left: "4%", animationDelay: "0s" }} />
         <FloatingPill className="floating-pill" label="React Development" icon="⚛️" style={{ top: "35%", right: "3%", animationDuration: "5s", animationDelay: "1s" }} />
         <FloatingPill className="floating-pill" label="Graphic Design" icon="🎨" style={{ bottom: "30%", left: "2%", animationDuration: "4.5s", animationDelay: "0.5s" }} />
         <FloatingPill className="floating-pill" label="Spanish Language" icon="🇪🇸" style={{ bottom: "22%", right: "4%", animationDuration: "5.5s", animationDelay: "1.5s" }} />
-        <FloatingPill className="floating-pill" label="Piano ✓ Verified" icon="🎹" style={{ top: "18%", right: "18%", animationDuration: "4s", animationDelay: "2s" }} />
+        <FloatingPill className="floating-pill" label="Piano ✓ Verified" icon="🎹" style={{ top: "18%", right: "18%", animationDuration: "4s", animationDelay: "2s" }} /> */}
 
         {/* Hero content */}
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 2 }}>
